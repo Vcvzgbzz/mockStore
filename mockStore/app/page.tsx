@@ -85,6 +85,7 @@ export default function Page() {
             setSearchString(e.target.value);
           }}
           value={searchString}
+          style={{paddingRight:'9px'}}
         />
         <Button
           onClick={() => {
@@ -98,35 +99,35 @@ export default function Page() {
             );
           }}
           text={"Search"}
+          style={{paddingLeft:'5px'}}
         />
         </div>
-        <div>
-        Count Incrementers --&gt;
-        <Button
-          text={count}
-          onClick={() => {
-            if (count >= 10) {
-              setCount(0);
-            } else {
-              setCount(count + 1);
-            }
-          }}
-          style={{backgroundColor:'white'}}
-        />
-        <Button
-          text={count2}
-          onClick={() => {
-            if (count2 >= 10) {
-              setCount2(0);
-            } else {
-              setCount2(count2+ 2);
-            }
-          }}
-          style={{backgroundColor:'white'}}
-        />
+          <div>
+          Count Incrementers --&gt;
+          <Button
+            text={count}
+            onClick={() => {
+              if (count >= 10) {
+                setCount(0);
+              } else {
+                setCount(count + 1);
+              }
+            }}
+            style={{backgroundColor:'white'}}
+          />
+          <Button
+            text={count2}
+            onClick={() => {
+              if (count2 >= 10) {
+                setCount2(0);
+              } else {
+                setCount2(count2+ 2);
+              }
+            }}
+            style={{backgroundColor:'white'}}
+          />
+        </div>
       </div>
-      </div>
-
       {returnStoreData() ? (
         <div style={productStyles.allProductWrapper}>
           {returnStoreData().map((item) => (
