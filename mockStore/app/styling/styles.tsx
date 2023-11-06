@@ -9,6 +9,7 @@ export const productStyles: { [key: string]: CSSProperties } = {
       position: 'relative',
       display: 'flex',
       flexDirection: 'column',
+      backgroundColor:'#ffffff'
     },
     productTitle: {
       fontSize: '1rem',
@@ -47,5 +48,11 @@ export const productStyles: { [key: string]: CSSProperties } = {
         padding: '20px',
         display: 'flex',
         flexDirection: 'column',
+      },
+      lineStyle: {
+        width: '100%',
+        height: '2px',
+        backgroundColor: '#000',
+        border: 'none',
       }
   }

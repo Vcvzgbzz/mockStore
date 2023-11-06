@@ -12,7 +12,7 @@ function ProductItem({ item} ) {
   return (
     <div style={productStyles.productContainer}>
       <div title={item.description} style={{top:'0',right:'0',backgroundColor:'lightblue',borderRadius:'5px',display:'flex',position:'absolute'}}>?</div>
-      <div style={{paddingBottom:'7px'}}>
+      <div style={{paddingBottom:'9px'}}>
       <p style={productStyles.productTitle}>{item.title}</p>
       <p style={productStyles.productPrice}>${item.price}</p>
       <img src={item.image} style={{ width: '100px' }} alt={item.title} />
@@ -41,6 +41,7 @@ function ProductItem({ item} ) {
 
 export default function Page() {
   const [count, setCount] = useState(0);
+  const [count2, setCount2] = useState(0);
   const [searchString, setSearchString] = useState("");
   const [pageData, setPageData] = useState<FakeStoreApiResponse | undefined>(undefined);
   const [filteredPageData, setFilteredPageData] = useState<FakeStoreApiResponse | undefined>(undefined);
@@ -69,10 +70,16 @@ export default function Page() {
 
   return (
     <body style={pageStyles.pageContainer}>
+      <div style={{display:'flex',justifyContent: 'space-between',alignItems:'center'}}>
       <h1>
         Mock Store
       </h1>
-      <div>
+      <img src="https://avatars.githubusercontent.com/u/112432989?v=4" style={{height:'60px'}}></img>
+      </div>
+      <hr style={pageStyles.lineStyle} />
+      <br/>
+      <div style={{display:'flex',justifyContent: 'space-between'}}>
+        <div>
         <Input
           onChange={(e) => {
             setSearchString(e.target.value);
@@ -92,6 +99,9 @@ export default function Page() {
           }}
           text={"Search"}
         />
+        </div>
+        <div>
+        Count Incrementers --&gt;
         <Button
           text={count}
           onClick={() => {
@@ -101,7 +111,20 @@ export default function Page() {
               setCount(count + 1);
             }
           }}
+          style={{backgroundColor:'white'}}
         />
+        <Button
+          text={count2}
+          onClick={() => {
+            if (count2 >= 10) {
+              setCount2(0);
+            } else {
+              setCount2(count2+ 2);
+            }
+          }}
+          style={{backgroundColor:'white'}}
+        />
+      </div>
       </div>
 
       {returnStoreData() ? (
@@ -113,6 +136,12 @@ export default function Page() {
       ) : (
         <div>Welcome, we are loading the store data for you...</div>
       )}
+      <hr style={pageStyles.lineStyle} />
+
+      <div style={{display:'flex'}}>
+      <a href="https://github.com/Vcvzgbzz/mockStore">Link to This project on GitHub</a>
+      </div>
+      
     </body>
   );
 }
