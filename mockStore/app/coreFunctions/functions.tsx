@@ -13,9 +13,9 @@ export function callApi<RequestType, ResponseType>({
     requestPayload,
     method
 }: CallApiProps<RequestType, ResponseType>) {
-    if(method==='post'){
+    
         fetch(url, {
-            method: 'POST',
+            method: method?method:'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -32,25 +32,6 @@ export function callApi<RequestType, ResponseType>({
                     onFail(error);
                 }
             });
-    }else{
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(requestPayload),
-        })
-            .then((res) => res.json())
-            .then((data: ResponseType) => {
-                if (onSuccess) {
-                    onSuccess(data);
-                }
-            })
-            .catch((error) => {
-                if (onFail) {
-                    onFail(error);
-                }
-            });
-    }
+    
     
 }

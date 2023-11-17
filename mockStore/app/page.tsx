@@ -4,11 +4,21 @@ import Button from "./controls/Button";
 import Input from "./controls/Input";
 import { callApi } from "./coreFunctions/functions";
 import { FakeStoreApiResponse,FakeStoreItem } from "./definitions/apiDefinitions";
-import { productStyles, pageStyles } from "./styling/styles";
+import { productStyles, pageStyles } from "./styles/styles";
 
-function ProductItem({ item} ) {
+interface cartData {
+  quantity:number,
+  item:FakeStoreItem
+}
+type cartDataArray = cartData[]
+interface productItemProps{
+  item:FakeStoreItem
+  setCartData:(data:cartDataArray)=>void;
+  cartData:cartDataArray|undefined
+}
+function ProductItem({ item,setCartData,cartData}:productItemProps ) {
   const [quantity, setQuantity] = useState(0);
-
+  console.log(cartData)
   return (
     <div style={productStyles.productContainer}>
       <div title={item.description} style={{top:'0',right:'0',backgroundColor:'lightblue',borderRadius:'5px',display:'flex',position:'absolute'}}>?</div>
@@ -34,6 +44,29 @@ function ProductItem({ item} ) {
         }}
         disabled={quantity === 0}
       />
+      <Button
+        text={"Add to Cart"}
+        onClick={() => {
+         setQuantity(0)
+         if(cartData){
+          const foundItem = cartData.find((e,i)=>{if(e.item.id===item.id){
+            let newData:cartDataArray=[]
+            cartData.forEach(e=>newData.push(e))
+            newData[i].quantity=newData[i].quantity+quantity
+          }})
+          if(foundItem){
+          }else{
+            setCartData([...cartData,{item:item,quantity:quantity}])
+          }
+         }else{
+          let newData = []
+          newData.push({item:item,quantity:quantity})
+          setCartData(newData)
+         }
+         
+        }}
+        disabled={quantity === 0}
+      />
       </div>
     </div>
   );
@@ -45,10 +78,12 @@ export default function Page() {
   const [searchString, setSearchString] = useState("");
   const [pageData, setPageData] = useState<FakeStoreApiResponse | undefined>(undefined);
   const [filteredPageData, setFilteredPageData] = useState<FakeStoreApiResponse | undefined>(undefined);
+  const [cartData,setCartData] = useState<cartDataArray|undefined>(undefined)
 
   useEffect(() => {
     callApi<undefined, FakeStoreApiResponse>({
       url: 'https://fakestoreapi.com/products',
+      method:'get',
       onSuccess: (data) => {
         setPageData(data);
       },
@@ -67,7 +102,14 @@ export default function Page() {
       return filteredPageData;
     }
   }
-
+  const totalCart = () =>{
+    let total = 0;
+    if(cartData){
+      cartData.forEach(e=>total=total+e.quantity)
+    }
+    
+    return total
+  }
   return (
     <body style={pageStyles.pageContainer}>
       <div style={{display:'flex',justifyContent: 'space-between',alignItems:'center'}}>
@@ -102,10 +144,13 @@ export default function Page() {
           style={{paddingLeft:'5px'}}
         />
         </div>
+        
+          Cart Total: {totalCart()}
+        
           <div>
           Count Incrementers --&gt;
           <Button
-            text={count}
+            text={count+''}
             onClick={() => {
               if (count >= 10) {
                 setCount(0);
@@ -116,7 +161,7 @@ export default function Page() {
             style={{backgroundColor:'white'}}
           />
           <Button
-            text={count2}
+            text={count2+''}
             onClick={() => {
               if (count2 >= 10) {
                 setCount2(0);
@@ -128,10 +173,10 @@ export default function Page() {
           />
         </div>
       </div>
-      {returnStoreData() ? (
+      {Array.isArray(returnStoreData())? (
         <div style={productStyles.allProductWrapper}>
           {returnStoreData().map((item) => (
-            <ProductItem key={item.id} item={item} />
+            <ProductItem key={item.id} item={item} cartData={cartData} setCartData={setCartData} />
           ))}
         </div>
       ) : (
